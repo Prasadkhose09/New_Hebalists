@@ -9,127 +9,82 @@ import 'package:url_launcher/url_launcher.dart';
 import 'dart:convert'; // For JSON encoding and decoding
 import 'package:http/http.dart' as https;
 
-class GeminiService {
-  // Your API Key
-  final String apiKey = "AIzaSyAHsLdtmR94JC2O-jJEB6EvsphLkBl7Wv0";
 
-  // The model name (e.g., gemini-1.5-flash)
-  final String model = "gemini-1.0-Pro";
 
-  // Function to generate content
-  Future<String> generateContent(String prompt) async {
-    const apiUrl = "https://generativelanguage.googleapis.com/v1beta2/models";
-
-    // Endpoint specific to the model
-    final endpoint = '$apiUrl/$model:generateText';
-
-    try {
-      // Request body
-      final requestBody = {
-        "prompt": {"text": prompt},
-        "temperature": 0.7,
-        "candidate_count": 1,
-      };
-
-      // Send the POST request
-      final response = await https.post(
-        Uri.parse(endpoint),
-        headers: {
-          "Content-Type": "application/json",
-          "Authorization": "Bearer $apiKey",
-        },
-        body: jsonEncode(requestBody),
-      );
-
-      if (response.statusCode == 200) {
-        // Parse response
-        final responseData = jsonDecode(response.body);
-        final generatedText =
-            responseData['candidates']?[0]['output'] ?? 'No response generated.';
-        return generatedText;
-      } else {
-        return "Error: ${response.statusCode} - ${response.reasonPhrase}";
-      }
-    } catch (e) {
-      return "Error: $e";
-    }
-  }
-}
-
-class ChatScreen extends StatefulWidget {
-  @override
-  _ChatScreenState createState() => _ChatScreenState();
-}
-
-class _ChatScreenState extends State<ChatScreen> {
-  final TextEditingController _controller = TextEditingController();
-  final GeminiService _geminiService = GeminiService();
-  String _response = "";
-
-  void _sendMessage() async {
-    if (_controller.text.isNotEmpty) {
-      setState(() {
-        _response = "Loading..."; // Show loading indicator
-      });
-
-      final userMessage = _controller.text;
-      // Call the correct function from GeminiService
-      final chatResponse = await _geminiService.generateContent(userMessage);
-
-      setState(() {
-        _response = chatResponse;
-      });
-
-      _controller.clear();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text("Your AI Doctor")),
-      body: Stack(
-        children: [
-          // Background Image with Opacity
-          Positioned.fill(
-            child: Opacity(
-              opacity: 0.3, // Adjust opacity as needed
-              child: Image.asset(
-                'assets/images/ChatscreenBack.jpg', // Replace with your actual image path
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          // Foreground Content
-          Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Column(
-              children: [
-                TextField(
-                  controller: _controller,
-                  decoration: const InputDecoration(
-                    labelText: "Ask me anything...",
-                    border: OutlineInputBorder(),
-                  ),
-                ),
-                const SizedBox(height: 16),
-                ElevatedButton(
-                  onPressed: _sendMessage,
-                  child: const Text("Send"),
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  "Response: $_response",
-                  style: const TextStyle(fontSize: 16),
-                ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+// class ChatScreen extends StatefulWidget {
+//   @override
+//   _ChatScreenState createState() => _ChatScreenState();
+// }
+//
+// class _ChatScreenState extends State<ChatScreen> {
+//   final TextEditingController _controller = TextEditingController();
+//   final GeminiService _geminiService = GeminiService();
+//   String _response = "";
+//
+//   void _sendMessage() async {
+//     if (_controller.text.isNotEmpty) {
+//       setState(() {
+//         _response = "Loading..."; // Show loading indicator
+//       });
+//
+//       final userMessage = _controller.text;
+//       // Call the correct function from GeminiService
+//       final chatResponse = await _geminiService.generateContent(userMessage);
+//
+//       setState(() {
+//         _response = chatResponse;
+//       });
+//
+//       _controller.clear();
+//     }
+//   }
+//
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text("Your AI Doctor")),
+//       body: Stack(
+//         children: [
+//           // Background Image with Opacity
+//           Positioned.fill(
+//             child: Opacity(
+//               opacity: 0.3, // Adjust opacity as needed
+//               child: Image.asset(
+//                 'assets/images/ChatscreenBack.jpg', // Replace with your actual image path
+//                 fit: BoxFit.cover,
+//               ),
+//             ),
+//           ),
+//           // Foreground Content
+//           Padding(
+//             padding: const EdgeInsets.all(16.0),
+//             child: Column(
+//               children: [
+//                 TextField(
+//                   controller: _controller,
+//                   decoration: const InputDecoration(
+//                     labelText: "Ask me anything...",
+//                     border: OutlineInputBorder(),
+//                   ),
+//                 ),
+//                 const SizedBox(height: 16),
+//                 ElevatedButton(
+//                   onPressed: _sendMessage,
+//                   child: const Text("Send"),
+//                 ),
+//                 const SizedBox(height: 16),
+//                 Text(
+//                   "Response: $_response",
+//                   style: const TextStyle(fontSize: 16),
+//                 ),
+//               ],
+//             ),
+//           ),
+//         ],
+//       ),
+//     );
+//   }
+// }
 
 
 class HoverCardExample extends StatefulWidget {
@@ -665,10 +620,10 @@ class _MyHomePageState extends State<MyHomePage> {
             onTap: (int index) {
               switch (index) {
                 case 0:
-                  Navigator.push( // Navigate to ChatScreen
-                    context,
-                    MaterialPageRoute(builder: (context) => ChatScreen()),
-                  );
+                  // Navigator.push( // Navigate to ChatScreen
+                  //   // context,
+                  //   // MaterialPageRoute(builder: (context) => ChatScreen()),
+                  // );
                   break;
                 case 1:
                   print("Cart tapped");
